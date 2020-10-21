@@ -534,6 +534,12 @@ class TestTDFBase(PFCPHelper):
     def show_commands_at_teardown(self):
         self.logger.info(self.vapi.cli("show upf flows"))
         self.logger.info(self.vapi.cli("show hardware"))
+        stats = self.vapi.vpp_stats('/var/run/stats.socks')
+        direct = stats.ls(['/upf'])
+        counters = stats.dump(direct)
+        self.logger.info("SMATOV: counters:")
+        for counter in counters:
+            self.logger.info(counter)
 
     def establish_reporting_session(self, report_app=False):
         self.cur_seid = seid()
